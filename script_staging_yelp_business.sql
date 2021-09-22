@@ -8,56 +8,56 @@ USE SCHEMA "EWRR"."STAGING_SCHEMA";
 /* the duration of the user session and is not visible to other users.                                        */
 
 CREATE OR REPLACE TABLE yelp_business (
-    business_id string,
-    name string,
-    address string,
-    city string,
-    state string,
-    postal_code string,
-    latitude string,
-    longitude string,
-    stars string,
-    review_count string,
-    is_open string,
-    attributes_NoiseLevel string,
-    attributes_BikeParking string,
-    attributes_RestaurantsAttire string,
-    attributes_BusinessAcceptsCreditCards string,
-    attributes_BusinessParking string,
+    business_id TEXT,
+    name TEXT,
+    address TEXT,
+    city TEXT,
+    state TEXT,
+    postal_code INT,
+    latitude FLOAT,
+    longitude FLOAT,
+    stars NUMBERIC(1,2),
+    review_count INT,
+    is_open INT,
+    attributes_NoiseLevel TEXT,
+    attributes_BikeParking BOOLEAN,
+    attributes_RestaurantsAttire TEXT,
+    attributes_BusinessAcceptsCreditCards BOOLEAN,
+    attributes_BusinessParking TEXT,
     attributes_RestaurantsReservations string,
-    attributes_GoodForKids string,
-    attributes_RestaurantsTakeOut string,
-    attributes_Caters string,
-    attributes_WiFi string,
-    attributes_RestaurantsDelivery string,
-    attributes_HasTV string,
-    attributes_RestaurantsPriceRange2 string,
-    attributes_Alcohol string,
-    attributes_Music string,
-    attributes_BusinessAcceptsBitcoin string,
-    attributes_GoodForDancing string,
-    attributes_DogsAllowed string,
-    attributes_BestNights string,
-    attributes_RestaurantsGoodForGroups string,
-    attributes_OutdoorSeating string,
-    attributes_HappyHour string,
-    attributes_RestaurantsTableService string,
-    attributes_GoodForMeal string,
-    attributes_WheelchairAccessible string,
-    attributes_Ambience string,
-    attributes_CoatCheck string,
-    attributes_DriveThru string,
-    attributes_Smoking string,
-    attributes_BYOB string,
-    attributes_Corkage string,
-    categories string,
-    hours_Monday string,
-    hours_Tuesday string,
-    hours_Wednesday string,
-    hours_Thursday string,
-    hours_Friday string,
-    hours_Saturday string,
-    hours_Sunday string
+    attributes_GoodForKids BOOLEAN,
+    attributes_RestaurantsTakeOut BOOLEAN,
+    attributes_Caters BOOLEAN,
+    attributes_WiFi TEXT,
+    attributes_RestaurantsDelivery BOOLEAN,
+    attributes_HasTV BOOLEAN,
+    attributes_RestaurantsPriceRange2 INT,
+    attributes_Alcohol TEXT,
+    attributes_Music TEXT,
+    attributes_BusinessAcceptsBitcoin BOOLEAN,
+    attributes_GoodForDancing BOOLEAN,
+    attributes_DogsAllowed BOOLEAN,
+    attributes_BestNights TEXT,
+    attributes_RestaurantsGoodForGroups BOOLEAN,
+    attributes_OutdoorSeating BOOLEAN,
+    attributes_HappyHour BOOLEAN,
+    attributes_RestaurantsTableService BOOLEAN,
+    attributes_GoodForMeal TEXT,
+    attributes_WheelchairAccessible BOOLEAN,
+    attributes_Ambience TEXT,
+    attributes_CoatCheck BOOLEAN,
+    attributes_DriveThru BOOLEAN,
+    attributes_Smoking TEXT,
+    attributes_BYOB BOOLEAN,
+    attributes_Corkage BOOLEAN,
+    categories TEXT,
+    hours_Monday TEXT,
+    hours_Tuesday TEXT,
+    hours_Wednesday TEXT,
+    hours_Thursday TEXT,
+    hours_Friday TEXT,
+    hours_Saturday TEXT,
+    hours_Sunday TEXT
 );
 
 /* Create a named file format with the file delimiter set as none and the record delimiter set as the new     */
@@ -81,8 +81,8 @@ CREATE OR REPLACE TEMPORARY STAGE sf_tut_stage
 /*                                                                                                            */
 /* Note that the example PUT statement references the macOS or Linux location of the data file.               */
 
-PUT file:///home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-affects-Restaurant-Ratings/data/yelp_data/yelp_dataset/yelp_academic_dataset_business_test.json @sf_tut_stage;
-
+/* PUT file:///home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-affects-Restaurant-Ratings/data/yelp_data/yelp_dataset/yelp_academic_dataset_business_test.json @sf_tut_stage; */
+PUT file:///home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-affects-Restaurant-Ratings/data/yelp_data/yelp_dataset/yelp_academic_dataset_business.json @sf_tut_stage;
 
 /* Load the JSON data into the relational table.                                                              */
 /*                                                                                                            */
@@ -150,19 +150,8 @@ COPY INTO yelp_business(business_id, name, address, city, state, postal_code, la
                  parse_json($1):hours.Friday,
                  parse_json($1):hours.Saturday,
                  parse_json($1):hours.Sunday
-          FROM @sf_tut_stage/yelp_academic_dataset_business_test.json.gz t)
+          FROM @sf_tut_stage/yelp_academic_dataset_business.json.gz t)
     ON_ERROR = 'continue';
 
 /* Query the relational table                                                                                 */
-
-SELECT * from yelp_business;
-
-
-
-/* HELP                                                                                                                 */
-/*                                                                                                                      */
-/* COPY INTO home_sales(city, state, zip, sale_date, price)                                                             */
-/*  FROM (SELECT SUBSTR(parse_json($1):location.state_city,4), SUBSTR(parse_json($1):location.state_city,1,2),          */
-/*                parse_json($1):location.zip, to_timestamp_ntz(parse_json($1):sale_date), parse_json($1):price         */
-/*         FROM @sf_tut_stage/sales.json.gz t)                                                                          */
-/*   ON_ERROR = 'continue';                                                                                             */
+/*SELECT * from yelp_business;                                                                                */

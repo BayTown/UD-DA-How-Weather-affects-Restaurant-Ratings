@@ -1,5 +1,6 @@
 run command for sql scripts in snowflake
-!source //home/andi-ml/Documents/projects//UD-DA-Module-2/UD-DA-How-Weather-affects-Restaurant-Ratings/script_staging_yelp_business.sql
-
+!source //home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-affects-Restaurant-Ratings/script_staging_yelp_business.sql
+!source //home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-affects-Restaurant-Ratings/script_staging_yelp_checkin.sql
+!source //home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-affects-Restaurant-Ratings/script_staging_yelp_review.sql
 
 
