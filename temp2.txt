@@ -35,6 +35,11 @@ attributes_RestaurantsTableService
 attributes_GoodForMeal
 attributes_WheelchairAccessible
 attributes_Ambience
+attributes_CoatCheck
+attributes_DriveThru
+attributes_Smoking
+attributes_BYOB
+attributes_Corkage
 categories
 hours_Monday
 hours_Tuesday
