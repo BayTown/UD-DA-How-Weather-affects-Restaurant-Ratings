@@ -11,7 +11,7 @@ CREATE OR REPLACE TABLE yelp_review (
     review_id TEXT,
     user_id TEXT,
     business_id TEXT,
-    stars NUMERIC(1,2),
+    stars NUMERIC(3,2),
     useful INT,
     funny INT,
     cool INT,
@@ -56,7 +56,7 @@ COPY INTO yelp_review(review_id, user_id, business_id, stars, useful, funny, coo
                  parse_json($1):funny,
                  parse_json($1):cool,
                  parse_json($1):text,
-                 parse_json($1):date
+                 to_timestamp_ntz(parse_json($1):date)
           FROM @sf_tut_stage/yelp_academic_dataset_review.json.gz t)
     ON_ERROR = 'continue';
 

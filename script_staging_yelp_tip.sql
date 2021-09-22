@@ -47,7 +47,7 @@ COPY INTO yelp_tip(user_id, business_id, text, date, compliment_count)
     FROM (SELECT parse_json($1):user_id,
                  parse_json($1):business_id,
                  parse_json($1):text,
-                 parse_json($1):date,
+                 to_timestamp_ntz(parse_json($1):date),
                  parse_json($1):compliment_count
           FROM @sf_tut_stage/yelp_academic_dataset_tip.json.gz t)
     ON_ERROR = 'continue';

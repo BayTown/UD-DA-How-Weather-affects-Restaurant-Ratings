@@ -16,7 +16,7 @@ CREATE OR REPLACE TABLE yelp_business (
     postal_code INT,
     latitude FLOAT,
     longitude FLOAT,
-    stars NUMBERIC(1,2),
+    stars NUMERIC(3,2),
     review_count INT,
     is_open INT,
     attributes_NoiseLevel TEXT,
@@ -24,7 +24,7 @@ CREATE OR REPLACE TABLE yelp_business (
     attributes_RestaurantsAttire TEXT,
     attributes_BusinessAcceptsCreditCards BOOLEAN,
     attributes_BusinessParking TEXT,
-    attributes_RestaurantsReservations string,
+    attributes_RestaurantsReservations TEXT,
     attributes_GoodForKids BOOLEAN,
     attributes_RestaurantsTakeOut BOOLEAN,
     attributes_Caters BOOLEAN,
@@ -149,7 +149,7 @@ COPY INTO yelp_business(business_id, name, address, city, state, postal_code, la
                  parse_json($1):hours.Thursday,
                  parse_json($1):hours.Friday,
                  parse_json($1):hours.Saturday,
-                 parse_json($1):hours.Sunday
+                 parse_json($1):hours.Sunday 
           FROM @sf_tut_stage/yelp_academic_dataset_business.json.gz t)
     ON_ERROR = 'continue';
 

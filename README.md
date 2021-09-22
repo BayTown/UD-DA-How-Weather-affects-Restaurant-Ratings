@@ -18,3 +18,4 @@ https://engineeringblog.yelp.com/2020/06/how-businesses-have-reacted-to-covid-19
 ## Documentation
 
 https://docs.snowflake.com/en/user-guide/script-data-load-transform-json.html
+https://www.snowflake.com/wp-content/uploads/2017/08/Snowflake-How-to-Analyze-JSON-with-SQL.pdf
