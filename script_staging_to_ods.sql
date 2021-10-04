@@ -1,16 +1,8 @@
-/* SQL-Script to load staging data to ods */
-
-/* Select/use database and schema */
-USE DATABASE "EWRR";
-USE SCHEMA "EWRR"."ODS_SCHEMA";
-
-
-/* Truncate tables */
 TRUNCATE dim_business;
 TRUNCATE dim_timestamp;
 TRUNCATE dim_user;
 TRUNCATE dim_tip;
-
+TRUNCATE dim_checkin;
 
 /* Loading business data from staging to ods */
 INSERT INTO dim_business (business_id, name, address, city, state, postal_code,
@@ -47,6 +39,7 @@ FROM STAGING_SCHEMA.yelp_user as yu
 WHERE yu.user_id NOT IN (SELECT user_id FROM dim_user);
 
 
+
 /* Insert timestamps - timestamp - from tip table to timestamps table */
 INSERT INTO dim_timestamp (timestamp, date, day, week, month, year)
 SELECT yt.timestamp,
@@ -59,5 +52,13 @@ FROM STAGING_SCHEMA.yelp_tip as yt
 WHERE yt.timestamp NOT IN (SELECT timestamp FROM dim_timestamp);
 
 
-/* INSERT tip date from staging to ods */
+/* INSERT tip data from staging to ods */
 INSERT INTO dim_tip (user_id, business_id, text, timestamp, compliment_count)
+SELECT yt.user_id, yt.business_id, yt.text, yt.timestamp, yt.compliment_count
+FROM STAGING_SCHEMA.yelp_tip as yt;
+
+
+/* Insert checkin data from staging to ods */
+INSERT INTO dim_checkin (business_id, date)
+SELECT yc.business_id, yc.date
+FROM STAGING_SCHEMA.yelp_checkin as yc;

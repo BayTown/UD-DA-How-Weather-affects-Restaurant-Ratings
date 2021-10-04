@@ -87,7 +87,7 @@ CREATE OR REPLACE TABLE fact_review (
 
 /* Table dim_checkin */
 CREATE OR REPLACE TABLE dim_checkin (
-    checkin_id          INT     PRIMARY KEY,
+    checkin_id          INT     PRIMARY KEY         IDENTITY,
     business_id         TEXT,
     date                TEXT,
     CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id)
@@ -95,7 +95,7 @@ CREATE OR REPLACE TABLE dim_checkin (
 
 /* Table dim_covid */
 CREATE OR REPLACE TABLE dim_covid (
-    covid_id                    INT     PRIMARY KEY,
+    covid_id                    INT     PRIMARY KEY         IDENTITY,
     business_id                 TEXT,
     highlights                  TEXT,
     delivery_or_takeout         TEXT,

@@ -16,7 +16,7 @@ CREATE OR REPLACE TABLE yelp_review (
     funny INT,
     cool INT,
     text TEXT,
-    date DATETIME
+    timestamp DATETIME
 );
 
 /* Create a named file format with the file delimiter set as none and the record delimiter set as the new     */
@@ -47,7 +47,7 @@ PUT file:///home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-aff
 /* A SELECT query in the COPY statement identifies a numbered set of columns in the data files you are        */
 /* loading from. Note that all JSON data is stored in a single column ($1).                                   */
 
-COPY INTO yelp_review(review_id, user_id, business_id, stars, useful, funny, cool, text, date)
+COPY INTO yelp_review(review_id, user_id, business_id, stars, useful, funny, cool, text, timestamp)
     FROM (SELECT parse_json($1):review_id,
                  parse_json($1):user_id,
                  parse_json($1):business_id,
