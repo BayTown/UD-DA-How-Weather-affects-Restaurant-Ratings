@@ -108,7 +108,7 @@ COPY INTO yelp_business(business_id, name, address, city, state, postal_code, la
                  parse_json($1):postal_code,
                  parse_json($1):latitude,
                  parse_json($1):longitude,
-                 parse_json($1):stage,
+                 parse_json($1):stars,
                  parse_json($1):review_count,
                  parse_json($1):is_open,
                  parse_json($1):attributes.NoiseLevel,

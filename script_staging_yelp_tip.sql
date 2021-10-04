@@ -11,7 +11,7 @@ CREATE OR REPLACE TABLE yelp_tip (
     user_id TEXT,
     business_id TEXT,
     text TEXT,
-    date DATETIME,
+    timestamp DATETIME,
     compliment_count INT
 );
 
@@ -43,7 +43,7 @@ PUT file:///home/andi-ml/Documents/projects/UD-DA-Module-2/UD-DA-How-Weather-aff
 /* A SELECT query in the COPY statement identifies a numbered set of columns in the data files you are        */
 /* loading from. Note that all JSON data is stored in a single column ($1).                                   */
 
-COPY INTO yelp_tip(user_id, business_id, text, date, compliment_count)
+COPY INTO yelp_tip(user_id, business_id, text, timestamp, compliment_count)
     FROM (SELECT parse_json($1):user_id,
                  parse_json($1):business_id,
                  parse_json($1):text,

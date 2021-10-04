@@ -19,6 +19,16 @@ CREATE OR REPLACE TABLE dim_business (
     is_open         BOOLEAN
 );
 
+/* Table dim_timestamp */
+CREATE OR REPLACE TABLE dim_timestamp (
+    timestamp           DATETIME    PRIMARY KEY,
+    date                DATE,
+    day                 INT,
+    week                INT,
+    month               INT,
+    year                INT 
+);
+
 /* Table dim_user */
 CREATE OR REPLACE TABLE dim_user (
     user_id             TEXT            PRIMARY KEY,
@@ -42,7 +52,8 @@ CREATE OR REPLACE TABLE dim_user (
     compliment_cool     INT,
     compliment_funny    INT,
     compliment_writer   INT,
-    compliment_photos   INT
+    compliment_photos   INT,
+    CONSTRAINT FK_TI_ID FOREIGN KEY(yelping_since)      REFERENCES  dim_timestamp(timestamp)
 );
 
 /* Table dim_tip */
@@ -51,9 +62,11 @@ CREATE OR REPLACE TABLE dim_tip (
     user_id             TEXT,
     business_id         TEXT,
     text                TEXT,
-    date                DATETIME,
+    timestamp           DATETIME,
     compliment_count    INT,
-    CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  dim_user(user_id)
+    CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  dim_user(user_id),
+    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id),
+    CONSTRAINT FK_TI_ID FOREIGN KEY(timestamp)      REFERENCES  dim_timestamp(timestamp)
 );
 
 /* Table fact_review */
@@ -66,9 +79,10 @@ CREATE OR REPLACE TABLE fact_review (
     funny               BOOLEAN,
     cool                BOOLEAN,
     text                BOOLEAN,
-    date                DATETIME,
+    timestamp           DATETIME,
     CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  dim_user(user_id),
-    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id)
+    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id),
+    CONSTRAINT FK_TI_ID FOREIGN KEY(timestamp)      REFERENCES  dim_timestamp(timestamp)
 );
 
 /* Table dim_checkin */
