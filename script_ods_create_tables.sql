@@ -78,7 +78,7 @@ CREATE OR REPLACE TABLE fact_review (
     useful              BOOLEAN,
     funny               BOOLEAN,
     cool                BOOLEAN,
-    text                BOOLEAN,
+    text                TEXT,
     timestamp           DATETIME,
     CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  dim_user(user_id),
     CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id),
@@ -106,4 +106,22 @@ CREATE OR REPLACE TABLE dim_covid (
     temporary_closed_until      TEXT,
     virtual_services_offered    TEXT,
     CONSTRAINT FK_BU_ID         FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id)
+);
+
+/* Table dim_temperature */
+CREATE OR REPLACE TABLE dim_temperature (
+    temperature_id              INT     PRIMARY KEY         IDENTITY,
+    date                        DATE,
+    temp_min                    FLOAT,
+    temp_max                    FLOAT,
+    temp_normal_min             FLOAT,
+    temp_normal_max             FLOAT
+);
+
+/* Table dim_precipitation */
+CREATE OR REPLACE TABLE dim_precipitation (
+    precipitation_id            INT     PRIMARY KEY         IDENTITY,
+    date                        DATE,
+    precipitation               FLOAT,
+    precipitation_normal        FLOAT
 );
