@@ -1,1 +1,1 @@
- yb.business_id, yb.name, yb.address, yb.city, yb.state, yb.postal_code, yb.latitude, yb.longitude, yb.stars, yb.review_count, yb.is_open
+ yr.review_id, yr.user_id, yr.business_id, yr.stars, yr.usefull, yr.funny, yr.cool, yr.text, yr.timestamp

@@ -1,3 +1,10 @@
+/* SQL-Script to load the data from staging to ODS */
+
+/* Select/use database and schema */
+USE DATABASE "EWRR";
+USE SCHEMA "EWRR"."ODS_SCHEMA";
+
+
 TRUNCATE dim_business;
 TRUNCATE dim_timestamp;
 TRUNCATE dim_user;
