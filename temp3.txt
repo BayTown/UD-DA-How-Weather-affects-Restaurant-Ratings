@@ -1,1 +1,0 @@
- yu.user_id, yu.name, yu.review_count, yu.yelping_since, yu.useful, yu.funny, yu.cool, yu.elite, yu.friends, yu.fans, yu.average_stars, yu.compliment_hot, yu.compliment_more, yu.compliment_profile, yu.compliment_cute, yu.compliment_list, yu.compliment_note, yu.compliment_plain, yu.compliment_cool, yu.compliment_funny, yu.compliment_writer, yu.compliment_photos

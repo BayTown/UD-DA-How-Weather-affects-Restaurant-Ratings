@@ -1,1 +1,0 @@
- yr.review_id, yr.user_id, yr.business_id, yr.stars, yr.usefull, yr.funny, yr.cool, yr.text, yr.timestamp

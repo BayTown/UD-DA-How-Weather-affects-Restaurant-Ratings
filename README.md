@@ -3,8 +3,6 @@
 
 ## Project - UD-DA-How-Weather-affects-Restaurant-Ratings
 
-## Under construction
-
 
 ## Resources
 
