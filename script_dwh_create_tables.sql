@@ -1,4 +1,4 @@
-/* SQL-Script to create or replace the tables for the ODS */
+/* SQL-Script to create or replace the tables for the DWH */
 
 /* Select/use database and schema */
 USE DATABASE "EWRR";
