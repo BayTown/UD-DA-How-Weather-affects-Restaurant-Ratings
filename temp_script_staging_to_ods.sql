@@ -18,31 +18,22 @@ TRUNCATE precipitation;
 
 
 /* Loading business data from staging to ods */
-INSERT INTO business (business_id, name, location_id, stars, review_count, is_open)
-SELECT  yb.business_id,
-        yb.name,
-        lo.location_id,
-        yb.stars,
-        yb.review_count,
-        yb.is_open
+INSERT INTO business (business_id, name,  stars, review_count, is_open)
+SELECT  yb.business_id, yb.name, yb.address, yb.city, yb.state, yb.postal_code,
+        yb.latitude, yb.longitude, yb.stars, yb.review_count, yb.is_open
 FROM STAGING_SCHEMA.yelp_business AS yb
-LEFT JOIN location AS lo
-ON yb.address = lo.address AND
-yb.city = lo.city AND
-yb.state = lo.state AND
-yb.postal_code = lo.postal_code
 WHERE yb.business_id NOT IN (SELECT business_id FROM business);
 
 
 /* Loading location data from staging to ods*/
 INSERT INTO location (address, city, state, postal_code, latitude, longitude)
-SELECT yb.address, yb.city, yb.state, yb.postal_code, yb.latitude, yb.longitude
+SELECT DISTINCT yb.address, yb.city, yb.state, yb.postal_code, yb.latitude, yb.longitude
 FROM STAGING_SCHEMA.yelp_business AS yb
-QUALIFY ROW_NUMBER() OVER (PARTITION BY yb.state, yb.postal_code, yb.city, yb.address ORDER BY yb.state, yb.postal_code, yb.city, yb.address) = 1;
+WHERE yb.business_id NOT IN (SELECT business_id FROM business);
 
 
 /* Insert timestamps - yelping_since - from user table to timestamps table */
-INSERT INTO table_timestamp (timestamp, date, day, week, month, year)
+INSERT INTO timestamp (timestamp, date, day, week, month, year)
 SELECT yu.yelping_since,
        DATE(yu.yelping_since),
        DAY(yu.yelping_since),

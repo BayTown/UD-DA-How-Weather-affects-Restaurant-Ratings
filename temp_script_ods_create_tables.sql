@@ -4,31 +4,23 @@
 USE DATABASE "EWRR";
 USE SCHEMA "EWRR"."ODS_SCHEMA";
 
-
-/* Table location */
-CREATE OR REPLACE TABLE location (
-    location_id     INT         PRIMARY KEY         IDENTITY,
+/* Table dim_business */
+CREATE OR REPLACE TABLE dim_business (
+    business_id     TEXT            PRIMARY KEY,
+    name            TEXT,
     address         TEXT,
     city            TEXT,
     state           TEXT,
     postal_code     INT,
     latitude        FLOAT,
-    longitude       FLOAT
+    longitude       FLOAT,
+    stars           NUMERIC(3,2),
+    review_count    INT,
+    is_open         BOOLEAN
 );
 
-/* Table business */
-CREATE OR REPLACE TABLE business (
-    business_id         TEXT                        PRIMARY KEY,
-    name                TEXT,
-    location_id         INT,
-    stars               NUMERIC(3,2),
-    review_count        INT,
-    is_open             BOOLEAN,
-    CONSTRAINT FK_LO_ID FOREIGN KEY(location_id)    REFERENCES  location(location_id)
-);
-
-/* Table table_timestamp */
-CREATE OR REPLACE TABLE table_timestamp (
+/* Table dim_timestamp */
+CREATE OR REPLACE TABLE dim_timestamp (
     timestamp           DATETIME    PRIMARY KEY,
     date                DATE,
     day                 INT,
@@ -37,8 +29,8 @@ CREATE OR REPLACE TABLE table_timestamp (
     year                INT 
 );
 
-/* Table user */
-CREATE OR REPLACE TABLE user (
+/* Table dim_user */
+CREATE OR REPLACE TABLE dim_user (
     user_id             TEXT            PRIMARY KEY,
     name                TEXT,
     review_count        INT,
@@ -61,24 +53,24 @@ CREATE OR REPLACE TABLE user (
     compliment_funny    INT,
     compliment_writer   INT,
     compliment_photos   INT,
-    CONSTRAINT FK_TI_ID FOREIGN KEY(yelping_since)      REFERENCES  table_timestamp(timestamp)
+    CONSTRAINT FK_TI_ID FOREIGN KEY(yelping_since)      REFERENCES  dim_timestamp(timestamp)
 );
 
-/* Table tip */
-CREATE OR REPLACE TABLE tip (
+/* Table dim_tip */
+CREATE OR REPLACE TABLE dim_tip (
     tip_id              INT         PRIMARY KEY     IDENTITY,
     user_id             TEXT,
     business_id         TEXT,
     text                TEXT,
     timestamp           DATETIME,
     compliment_count    INT,
-    CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  user(user_id),
-    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  business(business_id),
-    CONSTRAINT FK_TI_ID FOREIGN KEY(timestamp)      REFERENCES  table_timestamp(timestamp)
+    CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  dim_user(user_id),
+    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id),
+    CONSTRAINT FK_TI_ID FOREIGN KEY(timestamp)      REFERENCES  dim_timestamp(timestamp)
 );
 
-/* Table review */
-CREATE OR REPLACE TABLE review (
+/* Table fact_review */
+CREATE OR REPLACE TABLE fact_review (
     review_id           TEXT        PRIMARY KEY,
     user_id             TEXT,
     business_id         TEXT,
@@ -88,21 +80,21 @@ CREATE OR REPLACE TABLE review (
     cool                BOOLEAN,
     text                TEXT,
     timestamp           DATETIME,
-    CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  user(user_id),
-    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  business(business_id),
-    CONSTRAINT FK_TI_ID FOREIGN KEY(timestamp)      REFERENCES  table_timestamp(timestamp)
+    CONSTRAINT FK_US_ID FOREIGN KEY(user_id)        REFERENCES  dim_user(user_id),
+    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id),
+    CONSTRAINT FK_TI_ID FOREIGN KEY(timestamp)      REFERENCES  dim_timestamp(timestamp)
 );
 
-/* Table checkin */
-CREATE OR REPLACE TABLE checkin (
+/* Table dim_checkin */
+CREATE OR REPLACE TABLE dim_checkin (
     checkin_id          INT     PRIMARY KEY         IDENTITY,
     business_id         TEXT,
     date                TEXT,
-    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  business(business_id)
+    CONSTRAINT FK_BU_ID FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id)
 );
 
-/* Table covid */
-CREATE OR REPLACE TABLE covid (
+/* Table dim_covid */
+CREATE OR REPLACE TABLE dim_covid (
     covid_id                    INT     PRIMARY KEY         IDENTITY,
     business_id                 TEXT,
     highlights                  TEXT,
@@ -113,11 +105,11 @@ CREATE OR REPLACE TABLE covid (
     covid_banner                TEXT,
     temporary_closed_until      TEXT,
     virtual_services_offered    TEXT,
-    CONSTRAINT FK_BU_ID         FOREIGN KEY(business_id)    REFERENCES  business(business_id)
+    CONSTRAINT FK_BU_ID         FOREIGN KEY(business_id)    REFERENCES  dim_business(business_id)
 );
 
-/* Table temperature */
-CREATE OR REPLACE TABLE temperature (
+/* Table dim_temperature */
+CREATE OR REPLACE TABLE dim_temperature (
     temperature_id              INT     PRIMARY KEY         IDENTITY,
     date                        DATE,
     temp_min                    FLOAT,
@@ -126,8 +118,8 @@ CREATE OR REPLACE TABLE temperature (
     temp_normal_max             FLOAT
 );
 
-/* Table precipitation */
-CREATE OR REPLACE TABLE precipitation (
+/* Table dim_precipitation */
+CREATE OR REPLACE TABLE dim_precipitation (
     precipitation_id            INT     PRIMARY KEY         IDENTITY,
     date                        DATE,
     precipitation               FLOAT,
