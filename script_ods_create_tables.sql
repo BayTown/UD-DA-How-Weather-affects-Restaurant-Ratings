@@ -4,7 +4,6 @@
 USE DATABASE "EWRR";
 USE SCHEMA "EWRR"."ODS_SCHEMA";
 
-
 /* Table location */
 CREATE OR REPLACE TABLE location (
     location_id     INT         PRIMARY KEY         IDENTITY,

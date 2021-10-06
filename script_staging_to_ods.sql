@@ -4,7 +4,6 @@
 USE DATABASE "EWRR";
 USE SCHEMA "EWRR"."ODS_SCHEMA";
 
-
 TRUNCATE business;
 TRUNCATE location;
 TRUNCATE table_timestamp;
@@ -16,6 +15,11 @@ TRUNCATE review;
 TRUNCATE temperature;
 TRUNCATE precipitation;
 
+/* Loading location data from staging to ods*/
+INSERT INTO location (address, city, state, postal_code, latitude, longitude)
+SELECT yb.address, yb.city, yb.state, yb.postal_code, yb.latitude, yb.longitude
+FROM STAGING_SCHEMA.yelp_business AS yb
+QUALIFY ROW_NUMBER() OVER (PARTITION BY yb.state, yb.postal_code, yb.city, yb.address ORDER BY yb.state, yb.postal_code, yb.city, yb.address) = 1;
 
 /* Loading business data from staging to ods */
 INSERT INTO business (business_id, name, location_id, stars, review_count, is_open)
@@ -33,14 +37,6 @@ yb.state = lo.state AND
 yb.postal_code = lo.postal_code
 WHERE yb.business_id NOT IN (SELECT business_id FROM business);
 
-
-/* Loading location data from staging to ods*/
-INSERT INTO location (address, city, state, postal_code, latitude, longitude)
-SELECT yb.address, yb.city, yb.state, yb.postal_code, yb.latitude, yb.longitude
-FROM STAGING_SCHEMA.yelp_business AS yb
-QUALIFY ROW_NUMBER() OVER (PARTITION BY yb.state, yb.postal_code, yb.city, yb.address ORDER BY yb.state, yb.postal_code, yb.city, yb.address) = 1;
-
-
 /* Insert timestamps - yelping_since - from user table to timestamps table */
 INSERT INTO table_timestamp (timestamp, date, day, week, month, year)
 SELECT yu.yelping_since,
@@ -51,7 +47,6 @@ SELECT yu.yelping_since,
        YEAR(yu.yelping_since)
 FROM STAGING_SCHEMA.yelp_user AS yu
 WHERE yu.yelping_since NOT IN (SELECT timestamp FROM table_timestamp);
-
 
 /* Loading user data from staging to ods */
 INSERT INTO user (user_id, name, review_count, yelping_since, useful, funny, cool, elite, friends,
@@ -66,8 +61,6 @@ SELECT yu.user_id, yu.name, yu.review_count, yu.yelping_since, yu.useful, yu.fun
 FROM STAGING_SCHEMA.yelp_user AS yu
 WHERE yu.user_id NOT IN (SELECT user_id FROM user);
 
-
-
 /* Insert timestamps - timestamp - from tip table to timestamps table */
 INSERT INTO table_timestamp (timestamp, date, day, week, month, year)
 SELECT yt.timestamp,
@@ -79,12 +72,10 @@ SELECT yt.timestamp,
 FROM STAGING_SCHEMA.yelp_tip AS yt
 WHERE yt.timestamp NOT IN (SELECT timestamp FROM table_timestamp);
 
-
 /* Insert tip data from staging to ods */
 INSERT INTO tip (user_id, business_id, text, timestamp, compliment_count)
 SELECT yt.user_id, yt.business_id, yt.text, yt.timestamp, yt.compliment_count
 FROM STAGING_SCHEMA.yelp_tip AS yt;
-
 
 /* Insert checkin data from staging to ods */
 INSERT INTO checkin (business_id, date)
@@ -110,7 +101,6 @@ SELECT yr.timestamp,
        YEAR(yr.timestamp) 
 FROM STAGING_SCHEMA.yelp_review AS yr
 WHERE yr.timestamp NOT IN (SELECT timestamp FROM table_timestamp);
-
 
 /* Insert fact data - review - from staging to ods */
 INSERT INTO review (review_id, user_id, business_id, stars, useful,
